@@ -34,35 +34,31 @@ public class RegistrationForm extends AbsBasePage {
         return email;
     }
 
-    public RegistrationForm enterUsername() {
+    public void enterUsername() {
         WebElement usernameElement = findByCssSelector("#username");
         enterText(usernameElement, getUsername());
         logger.info("Имя пользователя введено: {}", getUsername());
-        return this;
     }
 
-    public RegistrationForm enterEmail() {
+    public void enterEmail() {
         WebElement emailElement = findByCssSelector("#email");
         enterText(emailElement, getEmail());
         logger.info("Электронная почта введена: {}", getEmail());
-        return this;
     }
 
-    public RegistrationForm enterPassword() {
+    public void enterPassword() {
         WebElement passwordElement = findByCssSelector("#password");
         enterText(passwordElement, getPassword());
         logger.info("Пароль введён.");
-        return this;
     }
 
-    public RegistrationForm enterConfirmPassword() {
+    public void enterConfirmPassword() {
         WebElement confirmPasswordElement = findByCssSelector("#confirm_password");
         enterText(confirmPasswordElement, getPassword()); // Вводим подтверждение пароля
         logger.info("Пароль подтверждён.");
-        return this;
     }
 
-    public RegistrationForm checkPasswordsMatch() {
+    public void checkPasswordsMatch() {
         WebElement passwordElement = findByCssSelector("#password");
         WebElement confirmPasswordElement = findByCssSelector("#confirm_password");
 
@@ -75,11 +71,10 @@ public class RegistrationForm extends AbsBasePage {
             throw new AssertionError(String.format("Пароли не совпадают. Пароль '%s' Подтвержденный пароль '%s'", passwordValue, confirmPasswordValue)); // Генерируем ошибку, если пароли не совпадают
         }
         logger.info("Пароли совпадают.");
-        return this;
     }
 
     // Вводим дату рождения
-    public RegistrationForm enterBirthdate(String birthdate) {
+    public void enterBirthdate(String birthdate) {
         WebElement birthdateElement = findByCssSelector("#birthdate");
 
         // Преобразуем дату в формат 'ГГГГ-ММ-ДД', если она задана в формате 'ДД.ММ.ГГГГ'
@@ -89,8 +84,6 @@ public class RegistrationForm extends AbsBasePage {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].value = arguments[1];", birthdateElement, formattedDate);
         logger.info("Дата рождения введена: {}", formattedDate);
-
-        return this;
     }
 
     // Преобразуем дату в date формат 'ГГГГ-ММ-ДД'
@@ -107,23 +100,21 @@ public class RegistrationForm extends AbsBasePage {
     }
 
     // Метод выбора языка
-    public RegistrationForm selectLanguage(String value) {
+    public void selectLanguage(String value) {
         WebElement languageLevelElement = findByCssSelector("#language_level");
         selectDropdownByValue(languageLevelElement, value);
         logger.info("Выбран уровень языка: {}", value);
-        return this;
     }
 
     // Метод нажатия на кнопку Зарегистрироваться
-    public RegistrationForm clickRegisterButton() {
+    public void clickRegisterButton() {
         WebElement registerButton = findByCssSelector("input[type='submit']");
         registerButton.click();
         logger.info("Кнопка Зарегистрироваться нажата.");
-        return this;
     }
 
     // Метод для проверки вывода данных
-    public RegistrationForm verifyOutput(String birthdate, String languageLevel) {
+    public void verifyOutput(String birthdate, String languageLevel) {
         WebElement outputElement = findByCssSelector("#output");
         String outputText = outputElement.getText();
 
@@ -132,6 +123,5 @@ public class RegistrationForm extends AbsBasePage {
 
         Assertions.assertEquals(expectedText, outputText, "Данные не совпадают с выводом!");
         logger.info("Проверка вывода данных прошла успешно.");
-        return this;
     }
 }
