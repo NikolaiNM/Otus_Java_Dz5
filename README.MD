@@ -22,4 +22,4 @@
 Для запуска тестов с использованием Maven, можно передавать параметры через командную строку. Пример команды запуска:
 
 ```bash
-mvn clean test -DforCount=0 -Dbrowser=chrome -Dbase.url=https://otus.home.kartushin.su -Dusername=Nick -Dpassword=123321 -Demail=My@email.com
+clean test -DforCount=0 -Dbrowser=chrome -Dbase.url=https://otus.home.kartushin.su -Dusername=Nick -Dpassword=123321

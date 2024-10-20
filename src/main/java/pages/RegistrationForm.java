@@ -37,24 +37,28 @@ public class RegistrationForm extends AbsBasePage {
     public RegistrationForm enterUsername() {
         WebElement usernameElement = findByCssSelector("#username");
         enterText(usernameElement, getUsername());
+        logger.info("Имя пользователя введено: {}", getUsername());
         return this;
     }
 
     public RegistrationForm enterEmail() {
         WebElement emailElement = findByCssSelector("#email");
         enterText(emailElement, getEmail());
+        logger.info("Электронная почта введена: {}", getEmail());
         return this;
     }
 
     public RegistrationForm enterPassword() {
         WebElement passwordElement = findByCssSelector("#password");
         enterText(passwordElement, getPassword());
+        logger.info("Пароль введён.");
         return this;
     }
 
     public RegistrationForm enterConfirmPassword() {
         WebElement confirmPasswordElement = findByCssSelector("#confirm_password");
         enterText(confirmPasswordElement, getPassword()); // Вводим подтверждение пароля
+        logger.info("Пароль подтверждён.");
         return this;
     }
 
@@ -66,9 +70,11 @@ public class RegistrationForm extends AbsBasePage {
         String confirmPasswordValue = confirmPasswordElement.getAttribute("value"); // Получаем значение подтверждения
 
         // Проверяем совпадение паролей
-        if (!passwordValue.equals(confirmPasswordValue)) {
+        if (passwordValue == null || !passwordValue.equals(confirmPasswordValue)) {
+            logger.error("Пароли не совпадают. Пароль: '{}' Подтвержденный пароль: '{}'", passwordValue, confirmPasswordValue);
             throw new AssertionError(String.format("Пароли не совпадают. Пароль '%s' Подтвержденный пароль '%s'", passwordValue, confirmPasswordValue)); // Генерируем ошибку, если пароли не совпадают
         }
+        logger.info("Пароли совпадают.");
         return this;
     }
 
@@ -82,6 +88,7 @@ public class RegistrationForm extends AbsBasePage {
         // Устанавливаем дату через JavaScript, чтобы она корректно работала во всех браузерах
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].value = arguments[1];", birthdateElement, formattedDate);
+        logger.info("Дата рождения введена: {}", formattedDate);
 
         return this;
     }
@@ -91,6 +98,7 @@ public class RegistrationForm extends AbsBasePage {
         String[] parts = date.split("\\."); // Разделяем дату по точкам
 
         if (parts.length != 3) {
+            logger.error("Неверный формат даты. Ожидался формат 'ДД.ММ.ГГГГ'. Получено: {}", date);
             throw new IllegalArgumentException("Неверный формат даты. Ожидался формат 'ДД.ММ.ГГГГ'.");
         }
 
@@ -102,6 +110,7 @@ public class RegistrationForm extends AbsBasePage {
     public RegistrationForm selectLanguage(String value) {
         WebElement languageLevelElement = findByCssSelector("#language_level");
         selectDropdownByValue(languageLevelElement, value);
+        logger.info("Выбран уровень языка: {}", value);
         return this;
     }
 
@@ -109,6 +118,7 @@ public class RegistrationForm extends AbsBasePage {
     public RegistrationForm clickRegisterButton() {
         WebElement registerButton = findByCssSelector("input[type='submit']");
         registerButton.click();
+        logger.info("Кнопка Зарегистрироваться нажата.");
         return this;
     }
 
@@ -121,6 +131,7 @@ public class RegistrationForm extends AbsBasePage {
                 getUsername(), getEmail(), formatDateToISO(birthdate), languageLevel);
 
         Assertions.assertEquals(expectedText, outputText, "Данные не совпадают с выводом!");
+        logger.info("Проверка вывода данных прошла успешно.");
         return this;
     }
 }
