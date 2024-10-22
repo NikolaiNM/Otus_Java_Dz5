@@ -1,9 +1,9 @@
 package pages;
+
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 
 
 public class RegistrationForm extends AbsBasePage {
@@ -12,6 +12,17 @@ public class RegistrationForm extends AbsBasePage {
     protected String password;
     protected String email;
 
+    // Локаторы
+    private static final String USERNAME_SELECTOR = "#username";
+    private static final String EMAIL_SELECTOR = "#email";
+    private static final String PASSWORD_SELECTOR = "#password";
+    private static final String CONFIRM_PASSWORD_SELECTOR = "#confirm_password";
+    private static final String BIRTHDATE_SELECTOR = "#birthdate";
+    private static final String LANGUAGE_LEVEL_SELECTOR = "#language_level";
+    private static final String REGISTER_BUTTON_SELECTOR = "input[type='submit']";
+    private static final String OUTPUT_SELECTOR = "#output";
+
+
     public RegistrationForm(WebDriver driver) {
         super(driver);
         this.username = System.getProperty("username", "Nikolay");
@@ -19,54 +30,40 @@ public class RegistrationForm extends AbsBasePage {
         this.email = System.getProperty("email", "Test@email.com");
     }
 
-    // Метод для получения имени пользователя
-    public String getUsername() {
-        return username;
-    }
-
-    // Метод для получения пароля
-    public String getPassword() {
-        return password;
-    }
-
-    // Метод получения почты
-    public String getEmail() {
-        return email;
-    }
-
     public void enterUsername() {
-        WebElement usernameElement = findByCssSelector("#username");
-        enterText(usernameElement, getUsername());
-        logger.info("Имя пользователя введено: {}", getUsername());
+        WebElement usernameElement = findByCssSelector(USERNAME_SELECTOR);
+        enterText(usernameElement, username);
+        logger.info("Имя пользователя введено: {}", username);
     }
 
     public void enterEmail() {
-        WebElement emailElement = findByCssSelector("#email");
-        enterText(emailElement, getEmail());
-        logger.info("Электронная почта введена: {}", getEmail());
+        WebElement emailElement = findByCssSelector(EMAIL_SELECTOR);
+        enterText(emailElement, email);
+        logger.info("Электронная почта введена: {}", email);
     }
 
     public void enterPassword() {
-        WebElement passwordElement = findByCssSelector("#password");
-        enterText(passwordElement, getPassword());
+        WebElement passwordElement = findByCssSelector(PASSWORD_SELECTOR);
+        enterText(passwordElement, password);
         logger.info("Пароль введён.");
     }
 
     public void enterConfirmPassword() {
-        WebElement confirmPasswordElement = findByCssSelector("#confirm_password");
-        enterText(confirmPasswordElement, getPassword()); // Вводим подтверждение пароля
+        WebElement confirmPasswordElement = findByCssSelector(CONFIRM_PASSWORD_SELECTOR);
+        enterText(confirmPasswordElement, password); // Вводим подтверждение пароля
         logger.info("Пароль подтверждён.");
     }
 
     public void checkPasswordsMatch() {
-        WebElement passwordElement = findByCssSelector("#password");
-        WebElement confirmPasswordElement = findByCssSelector("#confirm_password");
+        WebElement passwordElement = findByCssSelector(PASSWORD_SELECTOR);
+        WebElement confirmPasswordElement = findByCssSelector(CONFIRM_PASSWORD_SELECTOR);
 
         String passwordValue = passwordElement.getAttribute("value"); // Получаем значение пароля
         String confirmPasswordValue = confirmPasswordElement.getAttribute("value"); // Получаем значение подтверждения
 
         // Проверяем совпадение паролей
         if (passwordValue == null || !passwordValue.equals(confirmPasswordValue)) {
+            // Возможно выводить значение пароля плохая идея?
             logger.error("Пароли не совпадают. Пароль: '{}' Подтвержденный пароль: '{}'", passwordValue, confirmPasswordValue);
             throw new AssertionError(String.format("Пароли не совпадают. Пароль '%s' Подтвержденный пароль '%s'", passwordValue, confirmPasswordValue)); // Генерируем ошибку, если пароли не совпадают
         }
@@ -75,7 +72,7 @@ public class RegistrationForm extends AbsBasePage {
 
     // Вводим дату рождения
     public void enterBirthdate(String birthdate) {
-        WebElement birthdateElement = findByCssSelector("#birthdate");
+        WebElement birthdateElement = findByCssSelector(BIRTHDATE_SELECTOR);
 
         // Преобразуем дату в формат 'ГГГГ-ММ-ДД', если она задана в формате 'ДД.ММ.ГГГГ'
         String formattedDate = formatDateToISO(birthdate);
@@ -101,25 +98,25 @@ public class RegistrationForm extends AbsBasePage {
 
     // Метод выбора языка
     public void selectLanguage(String value) {
-        WebElement languageLevelElement = findByCssSelector("#language_level");
+        WebElement languageLevelElement = findByCssSelector(LANGUAGE_LEVEL_SELECTOR);
         selectDropdownByValue(languageLevelElement, value);
         logger.info("Выбран уровень языка: {}", value);
     }
 
     // Метод нажатия на кнопку Зарегистрироваться
     public void clickRegisterButton() {
-        WebElement registerButton = findByCssSelector("input[type='submit']");
+        WebElement registerButton = findByCssSelector(REGISTER_BUTTON_SELECTOR);
         registerButton.click();
         logger.info("Кнопка Зарегистрироваться нажата.");
     }
 
     // Метод для проверки вывода данных
     public void verifyOutput(String birthdate, String languageLevel) {
-        WebElement outputElement = findByCssSelector("#output");
+        WebElement outputElement = findByCssSelector(OUTPUT_SELECTOR);
         String outputText = outputElement.getText();
 
         String expectedText = String.format("Имя пользователя: %s\nЭлектронная почта: %s\nДата рождения: %s\nУровень языка: %s",
-                getUsername(), getEmail(), formatDateToISO(birthdate), languageLevel);
+                username, email, formatDateToISO(birthdate), languageLevel);
 
         Assertions.assertEquals(expectedText, outputText, "Данные не совпадают с выводом!");
         logger.info("Проверка вывода данных прошла успешно.");

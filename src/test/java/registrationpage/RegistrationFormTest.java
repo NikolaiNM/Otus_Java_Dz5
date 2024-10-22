@@ -8,8 +8,7 @@ import org.openqa.selenium.WebDriver;
 import pages.RegistrationForm;
 
 public class RegistrationFormTest {
-    private final String birthdate = "30.09.1986";
-    private final String languageLevel = "intermediate";
+
     private WebDriver driver;
     private RegistrationForm onPage; // Объявляем переменную для страницы
 
@@ -30,6 +29,8 @@ public class RegistrationFormTest {
 
     @Test
     public void checkingRegistration2() {
+        String birthdate = "30.09.1986";
+        String languageLevel = "intermediate";
         onPage.enterUsername();
         onPage.enterEmail();
         onPage.enterPassword();
@@ -39,5 +40,6 @@ public class RegistrationFormTest {
         onPage.selectLanguage(languageLevel);
         onPage.clickRegisterButton();
         onPage.verifyOutput(birthdate, languageLevel);
+
     }
 }
