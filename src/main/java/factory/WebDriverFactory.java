@@ -12,7 +12,7 @@ import org.openqa.selenium.remote.AbstractDriverOptions;
 
 public class WebDriverFactory {
 
-    private String browserName = System.getProperty("browser", "chrome");
+    private final String browserName = System.getProperty("browser", "chrome");
 
 
     public WebDriver getDriver() {
