@@ -1,4 +1,5 @@
 package pages;
+
 import common.AbsCommon;
 import enums.registrationform.InputField;
 import org.openqa.selenium.By;
