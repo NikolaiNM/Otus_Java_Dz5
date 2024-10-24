@@ -1,5 +1,5 @@
 package registrationpage;
-
+import enums.registrationform.LanguageLevel;
 import factory.WebDriverFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,16 +30,16 @@ public class RegistrationFormTest {
     @Test
     public void checkingRegistration2() {
         String birthdate = "30.09.1986";
-        String languageLevel = "intermediate";
+        LanguageLevel languageLevel = LanguageLevel.INTERMEDIATE;
         onPage.enterUsername();
         onPage.enterEmail();
         onPage.enterPassword();
         onPage.enterConfirmPassword();
         onPage.checkPasswordsMatch();
         onPage.enterBirthdate(birthdate);
-        onPage.selectLanguage(languageLevel);
+        onPage.selectLanguage(languageLevel.getLanguageLevelValue());
         onPage.clickRegisterButton();
-        onPage.verifyOutput(birthdate, languageLevel);
+        onPage.verifyOutput(birthdate, languageLevel.getLanguageLevelValue());
 
     }
 }

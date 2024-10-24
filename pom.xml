@@ -93,7 +93,7 @@
                 <version>${surefire.plugin.version}</version>
                 <configuration>
                     <systemPropertyVariables>
-<!--                        <browser>chrome</browser>-->
+
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

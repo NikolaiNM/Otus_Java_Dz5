@@ -1,5 +1,6 @@
 package pages;
 import common.AbsCommon;
+import enums.registrationform.InputField;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,11 +9,12 @@ import org.openqa.selenium.support.ui.Select;
 
 public abstract class AbsBasePage extends AbsCommon {
 
+    private final String BASE_URL;
+
     public AbsBasePage(WebDriver driver) {
         super(driver);
+        this.BASE_URL = System.getProperty("base.url", "https://otus.home.kartushin.su/"); // Инициализируем в конструкторе
     }
-
-    private String BASE_URL = System.getProperty("base.url", "https://otus.home.kartushin.su/");
 
     public void open(String path) {
         driver.get(BASE_URL + path);
@@ -24,16 +26,20 @@ public abstract class AbsBasePage extends AbsCommon {
     }
 
     // Метод для ввода текста в выбранный элемент
-    public AbsBasePage enterText(WebElement element, String text) {
+    public void enterText(WebElement element, String text) {
         element.clear();
         element.sendKeys(text); // Вводим текст в найденный элемент
-        return this; // Возвращаем текущий экземпляр для цепочного вызова
     }
 
     // Метод для выбора элемента в выпадающем списке по значению
-    public AbsBasePage selectDropdownByValue(WebElement element, String value) {
+    public void selectDropdownByValue(WebElement element, String value) {
         Select select = new Select(element); // Создаем объект Select
         select.selectByValue(value); // Выбор по значению
-        return this; // Возвращаем экземпляр для цепочного вызова
+    }
+
+    public void enterFieldData(InputField field, String value) {
+        WebElement element = findByCssSelector(field.getSelector());
+        enterText(element, value);
+        logger.info("{} введено: {}", field.name(), value);
     }
 }

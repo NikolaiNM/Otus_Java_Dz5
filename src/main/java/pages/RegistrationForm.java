@@ -1,5 +1,6 @@
 package pages;
 
+import enums.registrationform.InputField;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -12,17 +13,6 @@ public class RegistrationForm extends AbsBasePage {
     protected String password;
     protected String email;
 
-    // Локаторы
-    private static final String USERNAME_SELECTOR = "#username";
-    private static final String EMAIL_SELECTOR = "#email";
-    private static final String PASSWORD_SELECTOR = "#password";
-    private static final String CONFIRM_PASSWORD_SELECTOR = "#confirm_password";
-    private static final String BIRTHDATE_SELECTOR = "#birthdate";
-    private static final String LANGUAGE_LEVEL_SELECTOR = "#language_level";
-    private static final String REGISTER_BUTTON_SELECTOR = "input[type='submit']";
-    private static final String OUTPUT_SELECTOR = "#output";
-
-
     public RegistrationForm(WebDriver driver) {
         super(driver);
         this.username = System.getProperty("username", "Nikolay");
@@ -31,32 +21,24 @@ public class RegistrationForm extends AbsBasePage {
     }
 
     public void enterUsername() {
-        WebElement usernameElement = findByCssSelector(USERNAME_SELECTOR);
-        enterText(usernameElement, username);
-        logger.info("Имя пользователя введено: {}", username);
+        enterFieldData(InputField.USERNAME, username);
     }
 
     public void enterEmail() {
-        WebElement emailElement = findByCssSelector(EMAIL_SELECTOR);
-        enterText(emailElement, email);
-        logger.info("Электронная почта введена: {}", email);
+        enterFieldData(InputField.EMAIL, email);
     }
 
     public void enterPassword() {
-        WebElement passwordElement = findByCssSelector(PASSWORD_SELECTOR);
-        enterText(passwordElement, password);
-        logger.info("Пароль введён.");
+        enterFieldData(InputField.PASSWORD, password);
     }
 
     public void enterConfirmPassword() {
-        WebElement confirmPasswordElement = findByCssSelector(CONFIRM_PASSWORD_SELECTOR);
-        enterText(confirmPasswordElement, password); // Вводим подтверждение пароля
-        logger.info("Пароль подтверждён.");
+        enterFieldData(InputField.CONFIRM_PASSWORD, password);
     }
 
     public void checkPasswordsMatch() {
-        WebElement passwordElement = findByCssSelector(PASSWORD_SELECTOR);
-        WebElement confirmPasswordElement = findByCssSelector(CONFIRM_PASSWORD_SELECTOR);
+        WebElement passwordElement = findByCssSelector(InputField.PASSWORD.getSelector());
+        WebElement confirmPasswordElement = findByCssSelector(InputField.CONFIRM_PASSWORD.getSelector());
 
         String passwordValue = passwordElement.getAttribute("value"); // Получаем значение пароля
         String confirmPasswordValue = confirmPasswordElement.getAttribute("value"); // Получаем значение подтверждения
@@ -72,7 +54,7 @@ public class RegistrationForm extends AbsBasePage {
 
     // Вводим дату рождения
     public void enterBirthdate(String birthdate) {
-        WebElement birthdateElement = findByCssSelector(BIRTHDATE_SELECTOR);
+        WebElement birthdateElement = findByCssSelector(InputField.BIRTHDATE.getSelector());
 
         // Преобразуем дату в формат 'ГГГГ-ММ-ДД', если она задана в формате 'ДД.ММ.ГГГГ'
         String formattedDate = formatDateToISO(birthdate);
@@ -98,21 +80,21 @@ public class RegistrationForm extends AbsBasePage {
 
     // Метод выбора языка
     public void selectLanguage(String value) {
-        WebElement languageLevelElement = findByCssSelector(LANGUAGE_LEVEL_SELECTOR);
+        WebElement languageLevelElement = findByCssSelector(InputField.LANGUAGE_LEVEL.getSelector());
         selectDropdownByValue(languageLevelElement, value);
         logger.info("Выбран уровень языка: {}", value);
     }
 
     // Метод нажатия на кнопку Зарегистрироваться
     public void clickRegisterButton() {
-        WebElement registerButton = findByCssSelector(REGISTER_BUTTON_SELECTOR);
+        WebElement registerButton = findByCssSelector(InputField.REGISTER_BUTTON.getSelector());
         registerButton.click();
         logger.info("Кнопка Зарегистрироваться нажата.");
     }
 
     // Метод для проверки вывода данных
     public void verifyOutput(String birthdate, String languageLevel) {
-        WebElement outputElement = findByCssSelector(OUTPUT_SELECTOR);
+        WebElement outputElement = findByCssSelector(InputField.OUTPUT.getSelector());
         String outputText = outputElement.getText();
 
         String expectedText = String.format("Имя пользователя: %s\nЭлектронная почта: %s\nДата рождения: %s\nУровень языка: %s",
